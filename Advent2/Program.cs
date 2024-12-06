@@ -8,42 +8,31 @@ public class Program
     public static void Main()
     {
         var filePath = "..\\..\\..\\input.txt";
-        List<int> firstColumn = [];
-        List<int> secondColumn = [];
-        int totalDiff = 0;
-        ReadColumnsFromFile(filePath, firstColumn, secondColumn);
-
-        foreach (var x in firstColumn)
-        {
-            //int y = secondColumn.Where((_) => _ == x).Count();
-            //int z = x * y;
-            //totalDiff += z;
-            //Console.WriteLine(string.Join(", ", x, y, z, totalDiff));
-
-            // terse
-            totalDiff += x * secondColumn.Where((_) => _ == x).Count();
-        }
-
-        Console.WriteLine($"The answer is {totalDiff}");
-    }
-
-    public static void ReadColumnsFromFile(string filePath, List<int> firstColumn, List<int> secondColumn)
-    {
+        int totalSafe = 0;
+        
         foreach (var line in File.ReadLines(filePath))
         {
-            var columns = line.Split([' ', '\t'], StringSplitOptions.RemoveEmptyEntries);
-            if (columns.Length >= 2)
-            {
-                if (int.TryParse(columns[0], out int firstValue) && int.TryParse(columns[1], out int secondValue))
-                {
-                    firstColumn.Add(firstValue);
-                    secondColumn.Add(secondValue);
-                }
-                else
-                {
-                    throw new Exception("wtf?");
-                }
-            }
+            var levels = line.Split([' ', '\t'], StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+            
+            totalSafe += IsSafe(levels) ? 1 : 0;
         }
+
+        Console.WriteLine($"The answer is {totalSafe}");
+    }
+
+    public static bool IsSafe(List<int> levels)
+    {
+        var up = levels[0] < levels[1];
+        for (int i = 0; i < levels.Count - 1; i++)
+        {
+            int x = levels[i];
+            var y = levels[i + 1];
+            
+            if (x == y || up != x < y || Math.Abs(x - y) > 3)
+            {
+                return false;
+            }          
+        }
+        return true;
     }
 }
