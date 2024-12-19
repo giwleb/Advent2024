@@ -9,6 +9,7 @@ public class Program
         var line = File.ReadAllText(filePath);
         line = line.Replace("\r\n", "");
 
+        // remove anything between don't() and do() or the end of the line
         var dontDoOperations = new Regex(@"don't\(\).*?(?:do\(\)|$)");
         line = dontDoOperations.Replace(line, "");
 

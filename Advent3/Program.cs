@@ -10,7 +10,6 @@ public class Program
         line = line.Replace("\r\n", "");
         var mulOperations = new Regex(@"mul\((?<num1>\d+),(?<num2>\d+)\)");
 
-        // loop through all the matches, treating them as a Match object
         foreach (Match match in mulOperations.Matches(line))
         {
             var num1 = int.Parse(match.Groups["num1"].Value);
